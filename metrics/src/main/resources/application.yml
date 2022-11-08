@@ -1,0 +1,6 @@
+micronaut:
+  application:
+    name: metrics
+kafka:
+  bootstrap:
+    servers: localhost:29092
