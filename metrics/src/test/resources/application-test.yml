@@ -1,5 +1,0 @@
-kafka:
-  streams:
-    word-count:
-      processing.guarantee: "exactly_once"
-      auto.offset.reset: "earliest"

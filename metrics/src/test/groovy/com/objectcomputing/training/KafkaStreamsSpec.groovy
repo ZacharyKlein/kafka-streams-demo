@@ -1,6 +1,7 @@
 package com.objectcomputing.training
 
 import com.objectcomputing.training.consumer.WordCountConsumer
+import com.objectcomputing.training.listeners.BeforeStartKafkaStreamsListenerImp
 import com.objectcomputing.training.producer.WordCountProducer
 import com.objectcomputing.training.service.WordCountQueryService
 import spock.lang.Retry
@@ -32,7 +33,7 @@ class KafkaStreamsSpec extends AbstractTestContainersSpec {
 
     void "test BeforeStartKafkaStreamsListener execution"() {
         when:
-        def builder = context.getBean(com.objectcomputing.training.listeners.BeforeStartKafkaStreamsListenerImp)
+        def builder = context.getBean(BeforeStartKafkaStreamsListenerImp)
 
         then:
         builder.executed

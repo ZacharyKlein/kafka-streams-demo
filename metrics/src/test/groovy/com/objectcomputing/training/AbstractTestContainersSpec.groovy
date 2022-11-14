@@ -17,9 +17,6 @@ abstract class AbstractTestContainersSpec extends Specification {
 
     @Shared
     @AutoCleanup
-    EmbeddedServer embeddedServer
-    @Shared
-    @AutoCleanup
     ApplicationContext context
     @Shared
     static KafkaContainer kafkaContainer = KafkaSetup.init()
@@ -28,26 +25,24 @@ abstract class AbstractTestContainersSpec extends Specification {
         List<Object> config = ["kafka.bootstrap.servers", kafkaContainer.bootstrapServers]
         config.addAll(getConfiguration())
 
-        embeddedServer = ApplicationContext.run(EmbeddedServer, CollectionUtils.mapOf(config as Object[]))
-
-        context = embeddedServer.applicationContext
+        context = ApplicationContext.run(CollectionUtils.mapOf(config as Object[]))
     }
 
     protected List<Object> getConfiguration() {
-        [
-                'micronaut.application.name', "metrics",
-                'kafka.streams.default.num.stream.threads', 1,
-                'kafka.streams.word-count.num.stream.threads', 1]
+        ['micronaut.application.name', "metrics"]
     }
-
 
     void cleanupSpec() {
         try {
-            embeddedServer.stop()
+            if (kafkaContainer) {
+                kafkaContainer.stop()
+                kafkaContainer = null
+            }
+            context.stop()
             log.warn("Stopped containers!")
         } catch (Exception ignored) {
             log.error("Could not stop containers")
         }
-        embeddedServer?.close()
+        context?.close()
     }
 }
