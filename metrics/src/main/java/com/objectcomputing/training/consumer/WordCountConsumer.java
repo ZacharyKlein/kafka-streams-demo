@@ -18,6 +18,8 @@ public class WordCountConsumer {
   @Topic("streams-wordcount-output")
   void count(@KafkaKey String word, long count) {
     wordCounts.put(word, count);
+
+    printWordTable();
   }
 
   public long getCount(String word) {
@@ -30,5 +32,14 @@ public class WordCountConsumer {
 
   public Map<String, Long> getWordCounts() {
     return Collections.unmodifiableMap(wordCounts);
+  }
+
+  public void printWordTable() {
+    System.out.println("--------Word Count Table--------");
+    getWordCounts().forEach((String w, Long c)-> {
+      System.out.format("%-16s%16d%n", w, c);
+    });
+
+    System.out.println("------End Word Count Table------\n\n");
   }
 }

@@ -22,6 +22,10 @@ public class WordCountStream {
     @Singleton
     @Named(STREAM_WORD_COUNT)
     KStream<String, String> wordCountStream(ConfiguredStreamBuilder builder) {
+        System.out.println("Initializing wordCountStream...");
+        System.out.println("INPUT: " + INPUT);
+        System.out.println("OUTPUT: " + OUTPUT);
+        System.out.println("WORD_COUNT_STORE: " + WORD_COUNT_STORE);
 
         Properties props = builder.getConfiguration();
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());

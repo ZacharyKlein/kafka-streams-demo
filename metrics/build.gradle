@@ -21,6 +21,7 @@ dependencies {
     implementation("io.micronaut:micronaut-validation")
 
     testImplementation("io.micronaut:micronaut-http-client")
+    testImplementation "org.testcontainers:kafka:1.17.5"
 
 }
 
@@ -40,6 +41,7 @@ micronaut {
         annotations("com.objectcomputing.training.*")
     }
     testResources {
+        enabled = false
         sharedServer = true
     }
 }
