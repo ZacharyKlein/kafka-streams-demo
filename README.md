@@ -38,6 +38,8 @@ curl -X POST --location "http://localhost:8080/word-count" \
 ```
 5. You should see the word counts logged out from the consumer in the metrics application.
 
+Notes: While not part of the exercise, the metrics application also contains a `WordCountQueryService` which demonstrates the use of the `InteractiveQueryService` from Kafka Streams. It is utilized in the `KafkaStreamsSpec` test class.
+
 ## Code Listings
 
 1.1
