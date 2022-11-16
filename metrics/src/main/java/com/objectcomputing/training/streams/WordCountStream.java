@@ -14,36 +14,26 @@ import java.util.Properties;
 
 @Factory
 public class WordCountStream {
-    public static final String STREAM_WORD_COUNT = "word-count";
-    public static final String INPUT = "streams-plaintext-input";
-    public static final String OUTPUT = "streams-wordcount-output";
-    public static final String WORD_COUNT_STORE = "word-count-store";
-
     @Singleton
-    @Named(STREAM_WORD_COUNT)
+    @Named("word-count")
     KStream<String, String> wordCountStream(ConfiguredStreamBuilder builder) {
         System.out.println("Initializing wordCountStream...");
-        System.out.println("INPUT: " + INPUT);
-        System.out.println("OUTPUT: " + OUTPUT);
-        System.out.println("WORD_COUNT_STORE: " + WORD_COUNT_STORE);
 
         Properties props = builder.getConfiguration();
         props.put(StreamsConfig.DEFAULT_KEY_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         props.put(StreamsConfig.DEFAULT_VALUE_SERDE_CLASS_CONFIG, Serdes.String().getClass().getName());
         props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
 
-        KStream<String, String> source = builder.stream(INPUT);
+        KStream<String, String> source = builder.stream("streams-plaintext-input");
 
         KTable<String, Long> groupedByWord = source
                 .flatMapValues(value -> Arrays.asList(value.toLowerCase().split("\\W+")))
                 .groupBy((key, word) -> word, Grouped.with(Serdes.String(), Serdes.String()))
-                .count(Materialized.as(WORD_COUNT_STORE));
+                .count(Materialized.as("word-count-store"));
 
         groupedByWord
-                //convert to stream
                 .toStream()
-                //send to output using specific serdes
-                .to(OUTPUT, Produced.with(Serdes.String(), Serdes.Long()));
+                .to("streams-wordcount-output", Produced.with(Serdes.String(), Serdes.Long()));
 
         return source;
     }

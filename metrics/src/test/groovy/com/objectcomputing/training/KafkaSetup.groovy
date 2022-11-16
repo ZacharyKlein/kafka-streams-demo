@@ -29,9 +29,9 @@ class KafkaSetup {
 
     //Override to create different topics on startup
     private static List<String> getTopics() {
-        return [WordCountStream.INPUT,
-                WordCountStream.OUTPUT,
-                WordCountStream.WORD_COUNT_STORE]
+        return ["streams-plaintext-input",
+                "streams-wordcount-output",
+                "word-count-store"]
     }
 
     static void createTopics() {
